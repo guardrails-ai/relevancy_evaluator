@@ -29,5 +29,4 @@ def test_fail():
         }
         guard.parse(test_value)
   
-    # Assert the exception has your error_message
-    assert str(exc_info.value) == "Validation failed for field with errors: The LLM says 'unrelated'. The validation failed."
+    assert str(exc_info.value) == "The LLM says 'unrelated'. The validation failed."
