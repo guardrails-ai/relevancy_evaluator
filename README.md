@@ -1,6 +1,6 @@
 # Overview
 
-| Developed by | Guardrails AI |
+| Developed by | harrison@arize.com |
 | --- | --- |
 | Date of development | Jul 12, 2024 |
 | Validator type | Format |
