@@ -24,7 +24,7 @@ This validator checks the relevancy of a reference text to an original question 
 ## Installation
 
 ```bash
-$ guardrails hub install hub://arize/relevancy_evaluator
+$ guardrails hub install hub://arize-ai/relevancy_evaluator
 ```
 
 
