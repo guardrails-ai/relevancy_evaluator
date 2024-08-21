@@ -9,7 +9,8 @@ from guardrails.validator_base import (
     register_validator,
 )
 from guardrails.stores.context import get_call_kwarg
-from litellm import completion, get_llm_provider
+from litellm import completion 
+from litellm.utils import get_llm_provider
 
 
 @register_validator(name="arize/relevancy_evaluator", data_type="string")
