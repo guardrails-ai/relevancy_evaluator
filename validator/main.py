@@ -1,6 +1,5 @@
 import os
-from typing import Any, Callable, Dict, Optional
-from warnings import warn
+from typing import Callable, Dict, Optional
 
 from guardrails.validator_base import (
     FailResult,
@@ -10,7 +9,8 @@ from guardrails.validator_base import (
     register_validator,
 )
 from guardrails.stores.context import get_call_kwarg
-from litellm import completion, get_llm_provider
+from litellm import completion 
+from litellm.utils import get_llm_provider
 
 
 @register_validator(name="arize/relevancy_evaluator", data_type="string")
@@ -92,37 +92,38 @@ class RelevancyEvaluator(Validator):
         try:
             response = completion(model=self.llm_callable, messages=messages, **kwargs)
             response = response.choices[0].message.content  # type: ignore
-            response = response.strip().lower()
+            response = response.strip().lower() # type: ignore
         except Exception as e:
             raise RuntimeError(f"Error getting response from the LLM: {e}") from e
 
         # 3. Return the response
         return response
 
-    def validate(self, value: Any, metadata: Dict) -> ValidationResult:
+    def validate(self, value: str, metadata: Dict) -> ValidationResult:
         """
         Validates is based on the relevance of the reference text to the original question.
 
         Args:
-            value (Any): The value to validate. It must contain 'original_prompt' and 'reference_text' keys.
-            metadata (Dict): The metadata for the validation. This is not used in the current implementation.
+            value (str): The value to validate.
+            metadata (Dict): The metadata for the validation. It must contain the key 'original_prompt', 
+            with the original question that the reference text is being compared to.
 
         Returns:
             ValidationResult: The result of the validation. It can be a PassResult if the reference 
                               text is relevant to the original question, or a FailResult otherwise.
         """
         # 1. Get the question and arg from the value
-        original_prompt = value.get("original_prompt")
+        original_prompt = metadata.get("original_prompt")
         if original_prompt is None:
             raise RuntimeError(
-                "original_prompt missing from value. "
+                "original_prompt missing from metadata. "
                 "Please provide the original prompt."
             )
 
-        reference = value.get("reference_text")
+        reference = value
         if reference is None:
             raise RuntimeError(
-                "'reference_text' missing from value. "
+                "Please pass a non-None value. "
                 "Please provide the reference text."
             )
 
