@@ -27,8 +27,6 @@ def test_fail():
         metadata = {
             "original_prompt": "What is the capital of France?",
         }
-        result = guard.parse(reference_text, metadata=metadata)
-        print('result', result)
-
+        guard.parse(reference_text, metadata=metadata)
   
     assert str(exc_info.value) == "Validation failed for field with errors: The LLM says 'unrelated'. The validation failed."
