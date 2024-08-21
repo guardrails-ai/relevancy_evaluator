@@ -91,7 +91,7 @@ class RelevancyEvaluator(Validator):
         try:
             response = completion(model=self.llm_callable, messages=messages, **kwargs)
             response = response.choices[0].message.content  # type: ignore
-            response = response.strip().lower()
+            response = response.strip().lower() # type: ignore
         except Exception as e:
             raise RuntimeError(f"Error getting response from the LLM: {e}") from e
 
@@ -115,14 +115,14 @@ class RelevancyEvaluator(Validator):
         original_prompt = metadata.get("original_prompt")
         if original_prompt is None:
             raise RuntimeError(
-                "original_prompt missing from value. "
+                "original_prompt missing from metadata. "
                 "Please provide the original prompt."
             )
 
         reference = value
         if reference is None:
             raise RuntimeError(
-                "'reference_text' missing from value. "
+                "Please pass a non-None value. "
                 "Please provide the reference text."
             )
 
