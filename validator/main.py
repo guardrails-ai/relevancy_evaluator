@@ -99,27 +99,28 @@ class RelevancyEvaluator(Validator):
         # 3. Return the response
         return response
 
-    def validate(self, value: Any, metadata: Dict) -> ValidationResult:
+    def validate(self, value: str, metadata: Dict) -> ValidationResult:
         """
         Validates is based on the relevance of the reference text to the original question.
 
         Args:
-            value (Any): The value to validate. It must contain 'original_prompt' and 'reference_text' keys.
-            metadata (Dict): The metadata for the validation. This is not used in the current implementation.
+            value (str): The value to validate.
+            metadata (Dict): The metadata for the validation. It must contain the key 'original_prompt', 
+            with the original question that the reference text is being compared to.
 
         Returns:
             ValidationResult: The result of the validation. It can be a PassResult if the reference 
                               text is relevant to the original question, or a FailResult otherwise.
         """
         # 1. Get the question and arg from the value
-        original_prompt = value.get("original_prompt")
+        original_prompt = metadata.get("original_prompt")
         if original_prompt is None:
             raise RuntimeError(
                 "original_prompt missing from value. "
                 "Please provide the original prompt."
             )
 
-        reference = value.get("reference_text")
+        reference = value
         if reference is None:
             raise RuntimeError(
                 "'reference_text' missing from value. "

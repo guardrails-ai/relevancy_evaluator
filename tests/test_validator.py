@@ -12,21 +12,23 @@ from validator import RelevancyEvaluator
 guard = Guard.from_string(validators=[RelevancyEvaluator(llm_callable="gpt-3.5-turbo", on_fail="exception")])
 
 def test_pass():
-    test_value = {
+    reference_text = "The capital of France is Paris."
+    metadata = {
         "original_prompt": "What is the capital of France?",
-        "reference_text": "The capital of France is Paris."
     }
-    result = guard.parse(test_value)
+    result = guard.parse(reference_text, metadata=metadata)
   
     assert result.validation_passed is True
-    assert result.validated_output == test_value
+    assert result.validated_output == reference_text
 
 def test_fail():
     with pytest.raises(Exception) as exc_info:
-        test_value = {
+        reference_text = "France is a country in Europe."
+        metadata = {
             "original_prompt": "What is the capital of France?",
-            "reference_text": "France is a country in Europe."
         }
-        guard.parse(test_value)
+        result = guard.parse(reference_text, metadata=metadata)
+        print('result', result)
+
   
-    assert str(exc_info.value) == "The LLM says 'unrelated'. The validation failed."
+    assert str(exc_info.value) == "Validation failed for field with errors: The LLM says 'unrelated'. The validation failed."
